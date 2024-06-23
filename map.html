@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Mapa Interactivo con Mapbox</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src='https://api.mapbox.com/mapbox-gl-js/v2.10.0/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v2.10.0/mapbox-gl.css' rel='stylesheet' />
+    <style>
+        body { margin: 0; padding: 0; }
+        #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+    </style>
+</head>
+<body>
+    <div id='map'></div>
+    <script>
+        mapboxgl.accessToken = 'pk.eyJ1IjoibW9udHNlZXBhdmV6IiwiYSI6ImNseHMyeTZ1bTExenEybHB6MmR0bXlhN3UifQ.bqsoJajlSPe6ZpbQbkSrEQ';
+        const map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/montseepavez/clxs358b703i601qm800pczxm',
+            center: [-98, 38.88], // Ubicación inicial [longitud, latitud]
+            zoom: 3
+        });
+
+        // Cargar datos desde el archivo JSON
+        fetch('random_data1.json')
+            .then(response => response.json())
+            .then(data => {
+                data.forEach(item => {
+                    let latitude = item.latitude || item.latitud;
+                    let longitude = item.longitude || item.longitud;
+                    if (latitude && longitude) {
+                        new mapboxgl.Marker()
+                            .setLngLat([longitude, latitude])
+                            .addTo(map);
+                    }
+                });
+            })
+            .catch(error => console.error('Error al cargar los datos:', error));
+    </script>
+</body>
+</html>
